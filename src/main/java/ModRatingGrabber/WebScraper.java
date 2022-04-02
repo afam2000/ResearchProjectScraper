@@ -17,7 +17,6 @@ public class WebScraper {
     Response response;
     ArrayList<String> mods = new ArrayList<>();
 
-
     void doHTML(String urlToScrape) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .addInterceptor(chain -> {

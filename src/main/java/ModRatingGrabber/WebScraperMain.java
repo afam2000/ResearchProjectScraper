@@ -15,7 +15,6 @@ public class WebScraperMain {
             System.out.println("Page: "+j+" added");
             targetURL = baseURL + j;
             scraper.doHTML(targetURL);
-
             //Find mod from homepage
             scraper.grabModsOnCurrentPage();
 
