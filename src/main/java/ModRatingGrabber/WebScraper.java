@@ -33,14 +33,7 @@ public class WebScraper {
         doc = Jsoup.connect(urlToScrape).post();
     }
 
-    String extractTitle(String content) {
-        final Pattern titleRegExp = Pattern.compile("<title>(.*?)</title>", Pattern.DOTALL);
-        final Matcher matcher = titleRegExp.matcher(content);
-        matcher.find();
-        return matcher.group(1);
-    }
-    ArrayList<String> grabModsOnCurrentPage() throws IOException {
-
+    ArrayList<String> grabModsOnCurrentPage(){
         //Target Website has specific heading style for their mods! :D
         Elements elements = grabFromHTML("h2","class");
 
@@ -56,8 +49,6 @@ public class WebScraper {
     }
     public Elements grabFromHTML(String tag, String spec)
     {
-        Elements elements = doc.select(tag+"["+spec+"]");
-
-        return elements;
+        return doc.select(tag+"["+spec+"]");
     }
 }
