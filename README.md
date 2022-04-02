@@ -7,4 +7,5 @@ Fetches all mods from minecraftmods.com (pages 1 - 80 hardcoded)
 
 ToDo:  
 Fetch Ratings from mods  
-Add functionality for atleast 1 other website.  
+Add functionality for atleast 1 other website.
+Save final report to file
