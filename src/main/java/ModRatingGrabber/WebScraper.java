@@ -32,7 +32,6 @@ public class WebScraper {
         response = client.newCall(request).execute();
         doc = Jsoup.connect(urlToScrape).post();
     }
-
     ArrayList<String> grabModsOnCurrentPage(){
         //Target Website has specific heading style for their mods! :D
         Elements elements = grabFromHTML("h2","class");
