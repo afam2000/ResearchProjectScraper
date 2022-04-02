@@ -7,5 +7,5 @@ Lists all mods available from minecraftmods.com (as of 4/2/2022, hardcoded the p
 
 ToDo:  
 Fetch Ratings from mods  
-Add functionality for atleast 1 other website.
+Add functionality for atleast 1 other website.  
 Save final report to file
