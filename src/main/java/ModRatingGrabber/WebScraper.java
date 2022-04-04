@@ -25,7 +25,6 @@ public class WebScraper {
         String test_subject = UtilityMethods.findValueAt("Last",doc.toString(),3,-19);
         if(Character.isDigit(test_subject.charAt(0))) // Future proofing for when page amount gets to 100's
         return Integer.valueOf(test_subject);
-
         return Integer.valueOf(test_subject.substring((1)));
     }
     void doHTML(String urlToScrape) throws IOException {
