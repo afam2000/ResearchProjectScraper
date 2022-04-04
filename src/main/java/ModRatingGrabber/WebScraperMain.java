@@ -6,25 +6,22 @@ import java.util.*;
 public class WebScraperMain {
     public static void main(String[] args) throws IOException {
         WebScraper scraper = new WebScraper();
-        Hashtable<String, String> links; // Key = URL, Datum = HTMLStatusCode
-        String baseURL = "https://www.minecraftmods.com/page/";
-        String targetURL = null;
+        String base_url = "https://www.minecraftmods.com/page/";
+        String target_url = null;
         int i = 0;
-        final int LAST_PAGE = 80;
-        for (int j = 1; j != LAST_PAGE+1; j++) {
-            System.out.println("Page: "+j+" added");
-            targetURL = baseURL + j;
-            scraper.doHTML(targetURL);
-            //Find mod from homepage
+        int last_page = scraper.getLastPage(); // Gets last page index from Last button in HTML
+
+        for (int j = 1; j != last_page+1; j++) {
+            System.out.println("Page: "+j+" / "+last_page+" added. "+(int)(((float)j/(float)last_page)*100)+"%");
+            target_url = base_url + j;
+            scraper.doHTML(target_url);
             scraper.grabModsOnCurrentPage();
-
-            //Find mod details
-            //scraper.grabFromHTML("script","type");
         }
-
         for(String mod:scraper.mods)
         {
-            System.out.println(++i+":"+mod);
+            scraper.doHTML(mod);
+            scraper.grabModRating();
+            ++i;
         }
     }
 }

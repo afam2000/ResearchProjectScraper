@@ -12,11 +12,22 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class WebScraper {
-    private Document doc;
+    Document doc;
     Request request;
     Response response;
     ArrayList<String> mods = new ArrayList<>();
+    ArrayList<Float> scores = new ArrayList<>();
+    ArrayList<Integer> votes = new ArrayList<>();
 
+
+    int getLastPage() throws IOException {
+        doHTML("https://www.minecraftmods.com/");
+        String test_subject = UtilityMethods.findValueAt("Last",doc.toString(),3,-19);
+        if(Character.isDigit(test_subject.charAt(0))) // Future proofing for when page amount gets to 100's
+        return Integer.valueOf(test_subject);
+
+        return Integer.valueOf(test_subject.substring((1)));
+    }
     void doHTML(String urlToScrape) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .addInterceptor(chain -> {
@@ -30,6 +41,10 @@ public class WebScraper {
         request = new Request.Builder().url(urlToScrape).build();
         response = client.newCall(request).execute();
         doc = Jsoup.connect(urlToScrape).post();
+        if(!response.isSuccessful())
+        {
+            response.close();
+        }
     }
     ArrayList<String> grabModsOnCurrentPage(){
         //Target Website has specific heading style for their mods! :D
@@ -41,12 +56,42 @@ public class WebScraper {
             //Calculate ending
             int cutOff = tempString.indexOf("\"");
             tempString = tempString.substring(0,cutOff);
+
             mods.add(tempString);
         }
         return mods;
     }
+
+    public void grabModRating()
+    {
+        Elements elements = grabFromHTML("script","type");
+        for(Element seeker : elements)
+        {
+            if(seeker.toString().contains("ratingValue"))
+            {
+                String datum = seeker.data();
+                int start = datum.indexOf("ratingValue")+18; //cut off prefix
+                datum =datum.substring(start,start+4);
+                scores.add(Float.valueOf(datum));
+
+                datum = seeker.data();
+                start = datum.indexOf("ratingCount")+18;
+                datum = datum.substring(start);
+                datum = datum.substring(0,datum.indexOf(","));
+                datum = datum.substring(0,datum.indexOf("\""));
+
+                votes.add(Integer.valueOf(datum));
+                int index = scores.size()-1;
+               printModInfo(index);
+            }
+        }
+    }
     public Elements grabFromHTML(String tag, String spec)
     {
         return doc.select(tag+"["+spec+"]");
+    }
+    private void printModInfo(int index)
+    {
+        System.out.println("["+index+"] URL: "+mods.get(index)+" | Votes: "+votes.get(index)+" | Score (out of 5): "+scores.get(index));
     }
 }
