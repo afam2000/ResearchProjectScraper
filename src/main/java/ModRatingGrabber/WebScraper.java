@@ -48,7 +48,6 @@ public class WebScraper {
     ArrayList<String> grabModsOnCurrentPage(){
         //Target Website has specific heading style for their mods! :D
         Elements elements = grabFromHTML("h2","class");
-
         for(Element element : elements)
         {
             String tempString = element.toString().substring(32); //Chop off prefix
