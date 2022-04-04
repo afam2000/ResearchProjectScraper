@@ -45,7 +45,7 @@ public class WebScraper {
             response.close();
         }
     }
-    ArrayList<String> grabModsOnCurrentPage(){
+    ArrayList<String> grabModsOnCurrentPage() throws IOException {
         //Target Website has specific heading style for their mods! :D
         Elements elements = grabFromHTML("h2","class");
         for(Element element : elements)
@@ -56,6 +56,9 @@ public class WebScraper {
             tempString = tempString.substring(0,cutOff);
 
             mods.add(tempString);
+
+            doHTML(tempString);
+            grabModRating();
         }
         return mods;
     }
@@ -90,6 +93,6 @@ public class WebScraper {
     }
     private void printModInfo(int index)
     {
-        System.out.println("["+index+"] URL: "+mods.get(index)+" | Votes: "+votes.get(index)+" | Score (out of 5): "+scores.get(index));
+        System.out.println("["+(index+1)+"] URL: "+mods.get(index)+" | Votes: "+votes.get(index)+" | Score (out of 5): "+scores.get(index));
     }
 }
