@@ -19,16 +19,16 @@ public class WebScraper {
     ArrayList<Float> scores = new ArrayList<>();
     ArrayList<Integer> votes = new ArrayList<>();
 
-    static String findValueAt(String target, String haystack,int n,int offset) //n is desired amount of characters in returned string
+    String findValueAt(String target,int n,int offset) //n is desired amount of characters in returned string
     {                                                                      //offset to find value near target word
-        int start = haystack.indexOf(target)+offset;
+        int start = doc.toString().indexOf(target)+offset;
         int end = start+n;
-        return  haystack.substring(start,end);
+        return  doc.toString().substring(start,end);
     }
 
     int getLastPage() throws IOException {
         doHTML("https://www.minecraftmods.com/");
-        String test_subject = findValueAt("Last",doc.toString(),3,-19);
+        String test_subject = findValueAt("Last",3,-19);
         if(Character.isDigit(test_subject.charAt(0))) // Future proofing for when page amount gets to 100's
         return Integer.valueOf(test_subject);
         return Integer.valueOf(test_subject.substring((1)));
@@ -43,6 +43,8 @@ public class WebScraper {
                     return chain.proceed(authorized);
                 })
                 .build();
+        if(response!=null)
+        response.close(); // prevent some warnings from being thrown
         request = new Request.Builder().url(urlToScrape).build();
         response = client.newCall(request).execute();
         doc = Jsoup.connect(urlToScrape).post();
