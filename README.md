@@ -4,8 +4,8 @@ Utility program I'm developing to help me grab empirical data for my university 
 
 Currently:  
 Lists all mods available from minecraftmods.com
+Fetches Ratings from mods  
 
 ToDo:  
-Fetch Ratings from mods  
 Save final report to file  
 Add functionality for atleast 1 other website.  
