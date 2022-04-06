@@ -1,6 +1,6 @@
 # ResearchProjectScraper
 
-Utility program I'm developing to help me grab empirical data for my university research course. 
+Utility CLI program I'm developing to help me grab empirical data for my university research course. 
 
 Current Features:  
 Lists all mods from minecraftmods.com and their ratings  
