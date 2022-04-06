@@ -100,11 +100,12 @@ public class WebScraper {
                     temp_string = temp_string.substring(0,end);
                     if('?'!=temp_string.charAt(0)&&'"'!=temp_string.charAt(0))
                     {
-                        if(mods.isEmpty()||!temp_string.equals(mods.get(mods.size()-1)))
+                        if(mods.isEmpty()||!("https://www.planetminecraft.com/mod/"+temp_string).equals(mods.get(mods.size()-1)))
                         {
+                            temp_string = "https://www.planetminecraft.com/mod/"+temp_string;
                             //ToDo: Fix Page27+ bug
                             mods.add(temp_string);
-                            System.out.println("["+mods.size()+"] ModUrl: https://www.planetminecraft.com/mod/"+temp_string);
+                            System.out.println("["+mods.size()+"] ModUrl: "+mods.get(mods.size()-1));
                         }
                     }
                 }
