@@ -26,19 +26,34 @@ public class WebScraper {
         return  doc.toString().substring(start,end);
     }
 
-    int getLastPage() throws IOException {
-        doHTML("https://www.minecraftmods.com/");
-        String test_subject = findValueAt("Last",3,-19);
-        if(Character.isDigit(test_subject.charAt(0))) // Future proofing for when page amount gets to 100's
-        return Integer.valueOf(test_subject);
-        return Integer.valueOf(test_subject.substring((1)));
+    int getLastPage(int website) throws IOException {
+        if(website==1) { //minecraftmods
+            doHTML("https://www.minecraftmods.com/");
+            String test_subject = findValueAt("Last", 3, -19);
+            if (Character.isDigit(test_subject.charAt(0))) // Future proofing for when page amount gets to 100's
+                return Integer.parseInt(test_subject);
+            return Integer.parseInt(test_subject.substring((1)));
+        }
+        else if(website==2) //planetminecraft
+        {
+            doHTML("https://www.planetminecraft.com/mods/tag/mod/?p=");
+            String test_subject = findValueAt("</span> of",5,11);
+            while(test_subject.indexOf(',')!=-1) //remove commas from string to prep for integer conversion
+            {
+                int comma_place = test_subject.indexOf(',');
+                test_subject = test_subject.substring(0,comma_place)+test_subject.substring(comma_place+1);
+            }
+            return Integer.parseInt(test_subject)/25; //Each page consists of 25 (= 23 mods + 2 ads) listings
+
+
+        }
+        return -1;
     }
     void doHTML(String urlToScrape) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .addInterceptor(chain -> {
                     final Request original = chain.request();
                     final Request authorized = original.newBuilder()
-                            .addHeader("Cookie", "cookie-name=cookie-value")
                             .build();
                     return chain.proceed(authorized);
                 })
@@ -53,20 +68,54 @@ public class WebScraper {
             response.close();
         }
     }
-    ArrayList<String> grabModsOnCurrentPage() throws IOException {
+    ArrayList<String> grabModsOnCurrentPage(int website) throws IOException {
         //Target Website has specific heading style for their mods! :D
-        Elements elements = grabFromHTML("h2","class");
-        for(Element element : elements)
+
+        if(website==1)
         {
-            String tempString = element.toString().substring(32); //Chop off prefix
-            //Calculate ending
-            int cutOff = tempString.indexOf("\"");
-            tempString = tempString.substring(0,cutOff);
+           Elements elements = grabFromHTML("h2","class");
+            for(Element element : elements)
+            {
+                String temp_string = element.toString().substring(32); //Chop off prefix
+                //Calculate ending
+                int cutOff = temp_string.indexOf("\"");
+                temp_string = temp_string.substring(0,cutOff);
 
-            mods.add(tempString);
+                mods.add(temp_string);
 
-            doHTML(tempString);
-            grabModRating();
+                doHTML(temp_string);
+                grabModRating();
+            }
+        }
+        else if(website==2)
+        {
+            Elements elements = grabFromHTML("a","href");
+            for(Element element : elements)
+            {
+                if(element.toString().contains("/mod/"))
+                {
+                    String temp_string = element.toString();
+                    int start = temp_string.indexOf("/mod/")+5;
+                    temp_string = temp_string.substring(start);
+                    int end = temp_string.indexOf("/");
+                    temp_string = temp_string.substring(0,end);
+                    if(!mods.contains(temp_string)&&'?'!=temp_string.charAt(0)&&'"'!=temp_string.charAt(0))
+                    {
+                            mods.add(temp_string);
+                            System.out.println("["+mods.size()+"] ModUrl: https://www.planetminecraft.com/mod/"+temp_string);
+                    }
+                    else
+                    {
+
+                       if('?'!=temp_string.charAt(0)&&'"'!=temp_string.charAt(0)&&!temp_string.equals(mods.get(mods.size()-1)))
+                       {
+                         //ToDo: Fix Page27+ bug
+                           System.out.println("Missed Mod: "+temp_string);
+                       }
+                    }
+                }
+
+            }
         }
         return mods;
     }
