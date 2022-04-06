@@ -7,4 +7,4 @@ Lists all mods from minecraftmods.com and their ratings
 Lists the first 26 pages of planetminecraft.com   
 
 Bugs:  
-Cannot grab mods past page 26 (possibly website fault)
+Cannot grab mods past page 26 for planetminecraft (possibly website fault)
