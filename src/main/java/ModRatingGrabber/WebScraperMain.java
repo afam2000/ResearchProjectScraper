@@ -4,18 +4,18 @@ import java.io.IOException;
 
 public class WebScraperMain {
     public static void main(String[] args) throws IOException {
+
+        //MinecraftMods.com report
         String base_url = "https://www.minecraftmods.com/page/";
         WebScraper scraper = new WebScraper();
         int last_page = scraper.getLastPage(1); // Gets last page index from Last button in HTML
-        //MinecraftMods.com report
         printResults(scraper,base_url,last_page);
 
 
-
+        //planetminecraft.com report
         WebScraper scraper2 = new WebScraper();
         base_url = "https://www.planetminecraft.com/mods/tag/mod/?p=";
         last_page = scraper2.getLastPage(2);
-        //planetminecraft.com report
         printResults(scraper2,base_url,last_page);
 
 

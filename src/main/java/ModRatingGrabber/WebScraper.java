@@ -43,7 +43,7 @@ public class WebScraper {
                 int comma_place = test_subject.indexOf(',');
                 test_subject = test_subject.substring(0,comma_place)+test_subject.substring(comma_place+1);
             }
-            return Integer.parseInt(test_subject)/25; //Each page consists of 25 (= 23 mods + 2 ads) listings
+            return Integer.parseInt(test_subject)/25; //Each page paginated by 25
 
 
         }
@@ -70,7 +70,6 @@ public class WebScraper {
     }
     ArrayList<String> grabModsOnCurrentPage(int website) throws IOException {
         //Target Website has specific heading style for their mods! :D
-
         if(website==1)
         {
            Elements elements = grabFromHTML("h2","class");
@@ -99,22 +98,16 @@ public class WebScraper {
                     temp_string = temp_string.substring(start);
                     int end = temp_string.indexOf("/");
                     temp_string = temp_string.substring(0,end);
-                    if(!mods.contains(temp_string)&&'?'!=temp_string.charAt(0)&&'"'!=temp_string.charAt(0))
+                    if('?'!=temp_string.charAt(0)&&'"'!=temp_string.charAt(0))
                     {
+                        if(mods.isEmpty()||!temp_string.equals(mods.get(mods.size()-1)))
+                        {
+                            //ToDo: Fix Page27+ bug
                             mods.add(temp_string);
                             System.out.println("["+mods.size()+"] ModUrl: https://www.planetminecraft.com/mod/"+temp_string);
-                    }
-                    else
-                    {
-
-                       if('?'!=temp_string.charAt(0)&&'"'!=temp_string.charAt(0)&&!temp_string.equals(mods.get(mods.size()-1)))
-                       {
-                         //ToDo: Fix Page27+ bug
-                           System.out.println("Missed Mod: "+temp_string);
-                       }
+                        }
                     }
                 }
-
             }
         }
         return mods;
