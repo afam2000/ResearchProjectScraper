@@ -2,10 +2,9 @@
 
 Utility program I'm developing to help me grab empirical data for my university research course. 
 
-Currently:  
-Lists all mods available from minecraftmods.com  
-Fetches Ratings from mods  
+Current Features:  
+Lists all mods available from minecraftmods.com and their Ratings  
+Lists all mods from the first 26 pages of planetminecraft.com   
 
-ToDo:  
-Save final report to file  
-Add functionality for atleast 1 other website.  
+Bugs:  
+Cannot grab mods past page 26 (possibly website fault)
